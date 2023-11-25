@@ -8,7 +8,7 @@ import { auth } from "../../src/firebase/firebase";
 import { User } from "../../src/static/const/type";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { HJ_USER } from "../../src/static/const/variable";
-import { removeUserData, saveUserData } from "../../src/utils/functions";
+import { removeUserData, saveUserData } from "../../src/utils/functions/user";
 
 type Props = {};
 

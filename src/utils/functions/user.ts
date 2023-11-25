@@ -1,6 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { auth } from "../firebase/firebase";
-import { HJ_USER } from "../static/const/variable";
+import { auth } from "../../firebase/firebase";
+import { HJ_USER } from "../../static/const/variable";
 
 const saveUserData = async (key: string, value: string) => {
   try {
