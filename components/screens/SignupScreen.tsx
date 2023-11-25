@@ -5,6 +5,10 @@ import { View, Text, TextInput, Button, StyleSheet } from "react-native";
 import { StackNavigationProp, StackScreenProps } from "@react-navigation/stack";
 import { useNavigation } from "@react-navigation/native";
 import { RootStackParamList } from "../../App";
+import { API_KEY } from "@env";
+import { createUserWithEmailAndPassword, signOut } from "firebase/auth";
+import { auth } from "../../src/firebase/firebase";
+import { FirebaseError } from "firebase/app";
 
 type Props = {};
 type signupScreenProp = StackNavigationProp<RootStackParamList, "Signup">;
@@ -13,20 +17,23 @@ const SignupScreen = (props: Props) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigation = useNavigation<signupScreenProp>();
-  const handleSignup = () => {
-    
 
-    if(!email || !password){
-        alert('빈 값이 있습니다!')
-        return;
+  const handleSignup = async () => {
+    if (!email || !password) {
+      alert("빈 값이 있습니다!");
+      return;
     }
 
-    console.log("Email:", email);
-    console.log("Password:", password);
-    // 실제로는 서버에 회원가입 요청을 보내고 응답을 처리해야 합니다.
-
-    // 회원가입이 성공하면 로그인 페이지로 이동
-    navigation.navigate("Signup");
+    try {
+      await createUserWithEmailAndPassword(auth, email, password);
+      alert("회원가입 완료!");
+      signOut(auth);
+      navigation.navigate("Login");
+    } catch (e) {
+      const a = e as FirebaseError;
+      console.log(a.code);
+    }
+    navigation.navigate("Login");
   };
 
   return (

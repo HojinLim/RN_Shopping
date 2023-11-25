@@ -5,8 +5,11 @@ import React, { useState } from "react";
 import { View, Text, TextInput, Button, StyleSheet } from "react-native";
 import { RootStackParamList } from "../../App";
 import { useNavigation } from "@react-navigation/native";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../../src/firebase/firebase";
+import { ADMIN_ID, ADMIN_PASS } from "@env";
 
-type loginScreenProp = StackNavigationProp<RootStackParamList, "Signup">;
+type loginScreenProp = StackNavigationProp<RootStackParamList>; // 끝에 "Login 있었음"
 
 const LoginScreen = () => {
   const [email, setEmail] = useState("");
@@ -14,11 +17,30 @@ const LoginScreen = () => {
   const navigation = useNavigation<loginScreenProp>();
 
   type Props = {};
-  const handleLogin = (props: Props) => {
-    // 여기에서 로그인 로직을 처리할 수 있습니다.
-    console.log("Email:", email);
-    console.log("Password:", password);
-    navigation.navigate('Signup');
+  const isAdmin = () => {
+    if (email == ADMIN_ID && password == ADMIN_PASS) {
+      alert("안녕하세요. 관리자님!");
+      navigation.replace("Admin");
+      return true;
+    } else return false;
+  };
+  const handleLogin = async (props: Props) => {
+    if (isAdmin()) return;
+
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+
+      alert("로그인 완료!");
+      navigation.replace("Intro");
+    } catch (error) {
+      alert("로그인 실패!");
+      console.error("Error signing in:", error);
+      return;
+    }
+  };
+
+  const goSignup = () => {
+    navigation.replace("Signup");
   };
 
   return (
@@ -40,6 +62,7 @@ const LoginScreen = () => {
       />
 
       <Button title="Login" onPress={handleLogin} />
+      <Button title="Signup" onPress={goSignup} />
     </View>
   );
 };
