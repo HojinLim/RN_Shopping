@@ -6,7 +6,7 @@ import SignupScreen from "./components/screens/SignupScreen";
 import IntroScreen from "./components/screens/IntroScreen";
 import { RecoilRoot } from "recoil";
 import IconButton from "./components/IconButton";
-import { signOut } from "./src/utils/functions";
+import { signOut } from "./src/utils/functions/user";
 import { View } from "react-native";
 import AdminScreen from "./components/screens/AdminScreen";
 
@@ -23,7 +23,7 @@ const IntroHeaderRightButton = ({ navigation }: { navigation: any }) => (
   <View style={{ flexDirection: "row" }}>
     <IconButton
       iconName="log-in-outline"
-      onPress={() => navigation.replace("Login")}
+      onPress={() => navigation.replace("Admin")}
     />
     <IconButton iconName="log-out-outline" onPress={signOut} />
   </View>
