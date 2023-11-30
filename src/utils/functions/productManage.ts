@@ -4,7 +4,7 @@ import { deleteObject, getDownloadURL, getStorage, list, ref, uploadBytes } from
 
 
 // 'products'모든 데이터 가져오기
-const getAllData = async () => {
+const getAllProductData = async () => {
   try {
     const querySnapshot = await getDocs(collection(db, 'products'));
 
@@ -72,7 +72,7 @@ const uploadImage = async (image: Blob, key: number, productId: string) => {
   }
 };
 
-const deleteData = async (id: string) => {
+const deleteProduct = async (id: string) => {
   try {
     //storage에서 이미지 삭제
     const productRef = ref(storage, `products/${id}`);
@@ -89,4 +89,4 @@ const deleteData = async (id: string) => {
 };
 
 
-export { getAllData, addData, uploadImage, deleteData };
+export { getAllProductData, addData, uploadImage, deleteProduct };

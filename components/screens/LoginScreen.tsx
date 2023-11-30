@@ -3,13 +3,14 @@
 import { StackNavigationProp } from "@react-navigation/stack";
 import React, { useState } from "react";
 import { View, Text, TextInput, Button, StyleSheet } from "react-native";
-import { RootStackParamList } from "../../App";
+
 import { useNavigation } from "@react-navigation/native";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../src/firebase/firebase";
 import { ADMIN_ID, ADMIN_PASS } from "@env";
+import { RootStackParamList } from "../../src/static/const/type";
 
-type loginScreenProp = StackNavigationProp<RootStackParamList>; // 끝에 "Login 있었음"
+type loginScreenProp = StackNavigationProp<RootStackParamList>;
 
 const LoginScreen = () => {
   const [email, setEmail] = useState("");
@@ -20,7 +21,7 @@ const LoginScreen = () => {
   const isAdmin = () => {
     if (email == ADMIN_ID && password == ADMIN_PASS) {
       alert("안녕하세요. 관리자님!");
-      navigation.replace("Admin");
+      navigation.navigate("Admin");
       return true;
     } else return false;
   };
@@ -31,7 +32,7 @@ const LoginScreen = () => {
       await signInWithEmailAndPassword(auth, email, password);
 
       alert("로그인 완료!");
-      navigation.replace("Intro");
+      navigation.navigate("Home");
     } catch (error) {
       alert("로그인 실패!");
       console.error("Error signing in:", error);
@@ -40,7 +41,7 @@ const LoginScreen = () => {
   };
 
   const goSignup = () => {
-    navigation.replace("Signup");
+    navigation.navigate("Signup");
   };
 
   return (
@@ -60,9 +61,10 @@ const LoginScreen = () => {
         value={password}
         secureTextEntry
       />
-
-      <Button title="Login" onPress={handleLogin} />
-      <Button title="Signup" onPress={goSignup} />
+      <View style={styles.buttonContainer}>
+        <Button title="Login" onPress={handleLogin} />
+        <Button title="Signup" onPress={goSignup} />
+      </View>
     </View>
   );
 };
@@ -80,11 +82,14 @@ const styles = StyleSheet.create({
   },
   input: {
     height: 40,
-    width: "100%",
+    width: 200,
     borderColor: "gray",
     borderWidth: 1,
     marginBottom: 16,
     paddingHorizontal: 8,
+  },
+  buttonContainer: {
+    flexDirection: "row",
   },
 });
 

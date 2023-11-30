@@ -1,1 +1,1 @@
-export const HJ_USER = 'hj_user';
+export const HJ_USER = "hj_user";

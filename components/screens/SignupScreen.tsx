@@ -4,19 +4,17 @@ import React, { useState } from "react";
 import { View, Text, TextInput, Button, StyleSheet } from "react-native";
 import { StackNavigationProp, StackScreenProps } from "@react-navigation/stack";
 import { useNavigation } from "@react-navigation/native";
-import { RootStackParamList } from "../../App";
+
 import { API_KEY } from "@env";
 import { createUserWithEmailAndPassword, signOut } from "firebase/auth";
 import { auth } from "../../src/firebase/firebase";
 import { FirebaseError } from "firebase/app";
+import { RootStackParamList } from "../../src/static/const/type";
 
-type Props = {};
-type signupScreenProp = StackNavigationProp<RootStackParamList, "Signup">;
-
-const SignupScreen = (props: Props) => {
+const SignupScreen = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const navigation = useNavigation<signupScreenProp>();
+  const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
 
   const handleSignup = async () => {
     if (!email || !password) {

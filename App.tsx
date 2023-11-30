@@ -1,23 +1,35 @@
 import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
-import { createStackNavigator } from "@react-navigation/stack";
+import {
+  StackNavigationProp,
+  createStackNavigator,
+} from "@react-navigation/stack";
+
 import LoginScreen from "./components/screens/LoginScreen";
 import SignupScreen from "./components/screens/SignupScreen";
-import IntroScreen from "./components/screens/IntroScreen";
+import HomeScreen from "./components/screens/HomeScreen";
+import AdminScreen from "./components/screens/AdminScreen";
+import {
+  BottomTabNavigationProp,
+  createBottomTabNavigator,
+} from "@react-navigation/bottom-tabs";
 import { RecoilRoot } from "recoil";
 import IconButton from "./components/IconButton";
 import { signOut } from "./src/utils/functions/user";
 import { View } from "react-native";
-import AdminScreen from "./components/screens/AdminScreen";
-
-export type RootStackParamList = {
-  Intro: undefined;
-  Login: undefined;
-  Signup: undefined;
-  Admin: undefined;
-};
+import AccountScreen from "./components/screens/AccountScreen";
+import DetailProductScreen from "./components/screens/DetailProductScreen";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import {
+  RootStackParamList,
+  RootTabParamList,
+  queryClient,
+} from "./src/static/const/type";
+import LikeProductsScreen from "./components/screens/user/LikeProductsScreen";
+import CartProductsScreen from "./components/screens/user/CartProductsScreen";
 
 const Stack = createStackNavigator<RootStackParamList>();
+const Tab = createBottomTabNavigator<RootTabParamList>();
 
 const IntroHeaderRightButton = ({ navigation }: { navigation: any }) => (
   <View style={{ flexDirection: "row" }}>
@@ -29,38 +41,97 @@ const IntroHeaderRightButton = ({ navigation }: { navigation: any }) => (
   </View>
 );
 
-const ToHomeRightButton = ({ navigation }: { navigation: any }) => (
-  <IconButton
-    iconName="home-outline"
-    onPress={() => navigation.replace("Intro")}
-  />
-);
+const TabNavigator = () => {
+  // 바로 이부분
+  return (
+    <Tab.Navigator
+      screenOptions={({
+        navigation,
+      }: {
+        navigation: BottomTabNavigationProp<RootTabParamList>;
+      }) => ({
+        headerRight: () => (
+          <IconButton
+            iconName="home-outline"
+            onPress={() => navigation.navigate("Home")}
+          />
+        ),
+      })}
+    >
+      <Tab.Screen
+        name="Home"
+        component={HomeScreen}
+        options={{
+          // 탭 아이콘
+          tabBarIcon: ({ color, size }) => (
+            <IconButton iconName="home-outline" onPress={() => {}} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Account"
+        component={AccountScreen}
+        options={{
+          tabBarIcon: () => (
+            <IconButton iconName="person-circle-outline" onPress={() => {}} />
+          ),
+        }}
+      ></Tab.Screen>
+    </Tab.Navigator>
+  );
+};
 
 const App = () => {
   return (
-    <RecoilRoot>
-      <NavigationContainer>
-        <Stack.Navigator
-          initialRouteName="Intro"
-          screenOptions={({ navigation }) => ({
-            headerRight: () => <ToHomeRightButton navigation={navigation} />,
-          })}
-        >
-          <Stack.Screen
-            name="Intro"
-            component={IntroScreen}
-            options={({ navigation }) => ({
+    <QueryClientProvider client={queryClient}>
+      <RecoilRoot>
+        <NavigationContainer>
+          <Stack.Navigator
+            initialRouteName="Home"
+            screenOptions={({
+              navigation,
+            }: {
+              navigation: StackNavigationProp<RootStackParamList>;
+            }) => ({
               headerRight: () => (
-                <IntroHeaderRightButton navigation={navigation} />
+                <IconButton
+                  iconName="home-outline"
+                  onPress={() => navigation.navigate("Home")}
+                />
               ),
             })}
-          />
-          <Stack.Screen name="Login" component={LoginScreen} />
-          <Stack.Screen name="Signup" component={SignupScreen} />
-          <Stack.Screen name="Admin" component={AdminScreen} />
-        </Stack.Navigator>
-      </NavigationContainer>
-    </RecoilRoot>
+          >
+            <Stack.Screen
+              name="Tab"
+              component={TabNavigator}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen name="Signup" component={SignupScreen} />
+            <Stack.Screen
+              name="Admin"
+              component={AdminScreen}
+              options={({ navigation }) => ({
+                headerRight: () => (
+                  <IntroHeaderRightButton navigation={navigation} />
+                ),
+              })}
+            />
+            <Stack.Screen
+              name="Detail"
+              component={DetailProductScreen}
+              initialParams={{
+                id: "",
+                name: "",
+                category: "default",
+                price: 0,
+              }}
+            />
+            <Stack.Screen name="Like" component={LikeProductsScreen} />
+            <Stack.Screen name="Cart" component={CartProductsScreen} />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </RecoilRoot>
+    </QueryClientProvider>
   );
 };
 

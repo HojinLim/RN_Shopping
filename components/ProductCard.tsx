@@ -1,29 +1,41 @@
 import React from "react";
-import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
-import { Product } from "../src/static/const/type";
-import { deleteData } from "../src/utils/functions/productManage";
+import { View, Text, Image, TouchableOpacity, StyleSheet, Pressable } from "react-native";
+import { Product, RootStackParamList } from "../src/static/const/type";
+import { deleteProduct } from "../src/utils/functions/productManage";
+import { StackScreenProps } from "@react-navigation/stack";
 
 type Props = {
   item: Product;
 };
 
-const ProductCard = ({ item }: Props) => {
+type NavigationProps = StackScreenProps<RootStackParamList, "Detail">;
+
+const ProductCard = ({ item, navigation }: Props & NavigationProps) => {
   return (
     <View style={styles.container}>
       <TouchableOpacity
         onPress={() => {
-          /* handle press */
+          navigation.navigate("Detail", {
+            id: item.id,
+            imgs: item.imgs,
+            name: item.name,
+            price: item.price,
+            category: item.category,
+            like: item.like ?? 0,
+          });
         }}
       >
         <Image style={styles.image} source={{ uri: item.imgs[0] }} />
       </TouchableOpacity>
       <View style={styles.content}>
         <Text style={styles.title}>{item.name}</Text>
-        <Text style={styles.price}>{item.price}</Text>
+
+        <Text style={styles.title}>{item.category}</Text>
+        <Text style={styles.price}>{item.price}원</Text>
       </View>
       <TouchableOpacity
         style={styles.deleteButton}
-        onPress={() => deleteData(item.id)}
+        onPress={() => deleteProduct(item.id)}
       >
         <Text>삭제테스트</Text>
       </TouchableOpacity>
