@@ -1,5 +1,5 @@
 import { addDoc, collection, deleteDoc, doc, getDocs } from "firebase/firestore";
-import { db, storage } from "../../firebase/firebase";
+import { db, storage } from "../../../components/api/firebase/firebase";
 import { deleteObject, getDownloadURL, getStorage, list, ref, uploadBytes } from "firebase/storage";
 
 

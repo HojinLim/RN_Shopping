@@ -5,12 +5,13 @@ import { Ionicons } from "@expo/vector-icons";
 type Props = {
   onPress: () => void;
   iconName: any;
+  color: string;
 };
 
-const IconButton = (props: Props) => {
+const IconButton = ({ color, iconName, onPress }: Props) => {
   return (
     <Pressable>
-      <Ionicons name={props.iconName} onPress={props.onPress} size={24} />
+      <Ionicons name={iconName} onPress={onPress} size={24} color={color} />
     </Pressable>
   );
 };

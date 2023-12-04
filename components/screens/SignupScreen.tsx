@@ -7,7 +7,7 @@ import { useNavigation } from "@react-navigation/native";
 
 import { API_KEY } from "@env";
 import { createUserWithEmailAndPassword, signOut } from "firebase/auth";
-import { auth } from "../../src/firebase/firebase";
+import { auth } from "../api/firebase/firebase";
 import { FirebaseError } from "firebase/app";
 import { RootStackParamList } from "../../src/static/const/type";
 

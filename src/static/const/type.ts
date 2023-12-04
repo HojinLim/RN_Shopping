@@ -30,18 +30,16 @@ export type RootStackParamList = {
   Like: undefined;
   Cart: undefined;
   Detail: {
-    id: string;
-    name: string;
-    price: number;
-    category: string;
-    imgs: string[];
-    like: number;
+    item: Product;
   };
 };
 
 export type RootTabParamList = {
   Home: undefined;
   Account: undefined;
+  Detail: {
+    item: Product;
+  };
 };
 
 const queryClient = new QueryClient({

@@ -36,27 +36,25 @@ const IntroHeaderRightButton = ({ navigation }: { navigation: any }) => (
     <IconButton
       iconName="log-in-outline"
       onPress={() => navigation.replace("Admin")}
+      color="black"
     />
-    <IconButton iconName="log-out-outline" onPress={signOut} />
+    <IconButton iconName="log-out-outline" onPress={signOut} color="black" />
   </View>
 );
 
-const TabNavigator = () => {
+const TabNavigator = ({ navigation }: { navigation: any }) => {
   // 바로 이부분
   return (
     <Tab.Navigator
-      screenOptions={({
-        navigation,
-      }: {
-        navigation: BottomTabNavigationProp<RootTabParamList>;
-      }) => ({
+      screenOptions={{
         headerRight: () => (
           <IconButton
             iconName="home-outline"
             onPress={() => navigation.navigate("Home")}
+            color="black"
           />
         ),
-      })}
+      }}
     >
       <Tab.Screen
         name="Home"
@@ -64,7 +62,11 @@ const TabNavigator = () => {
         options={{
           // 탭 아이콘
           tabBarIcon: ({ color, size }) => (
-            <IconButton iconName="home-outline" onPress={() => {}} />
+            <IconButton
+              iconName="home-outline"
+              onPress={() => {}}
+              color="black"
+            />
           ),
         }}
       />
@@ -73,7 +75,11 @@ const TabNavigator = () => {
         component={AccountScreen}
         options={{
           tabBarIcon: () => (
-            <IconButton iconName="person-circle-outline" onPress={() => {}} />
+            <IconButton
+              iconName="person-circle-outline"
+              onPress={() => {}}
+              color="black"
+            />
           ),
         }}
       ></Tab.Screen>
@@ -97,6 +103,7 @@ const App = () => {
                 <IconButton
                   iconName="home-outline"
                   onPress={() => navigation.navigate("Home")}
+                  color="black"
                 />
               ),
             })}
@@ -116,18 +123,12 @@ const App = () => {
                 ),
               })}
             />
-            <Stack.Screen
-              name="Detail"
-              component={DetailProductScreen}
-              initialParams={{
-                id: "",
-                name: "",
-                category: "default",
-                price: 0,
-              }}
-            />
+            <Stack.Screen name="Detail" component={DetailProductScreen} />
             <Stack.Screen name="Like" component={LikeProductsScreen} />
             <Stack.Screen name="Cart" component={CartProductsScreen} />
+            <Stack.Group>
+              <Stack.Screen name="Login" component={LoginScreen} />
+            </Stack.Group>
           </Stack.Navigator>
         </NavigationContainer>
       </RecoilRoot>

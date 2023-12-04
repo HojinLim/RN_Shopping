@@ -41,8 +41,8 @@ const CartProductsScreen = () => {
       0
     );
   };
+  // 결제 완료 핸들러
   const handleCheckout = () => {
-    // 여기에 결제 로직을 추가할 수 있습니다.
     Alert.alert("결제 완료", "결제가 완료되었습니다.");
   };
 
@@ -71,11 +71,14 @@ const CartProductsScreen = () => {
       <View style={styles.itemDetails}>
         <Text style={styles.itemName}>{item.name}</Text>
         <Text style={styles.itemSubtitle}>수량: {item.quantity}</Text>
-        <Text style={styles.itemSubtitle}>가격: ${item.price.toFixed(2)}</Text>
+        <Text style={styles.itemSubtitle}>가격: ￦{item.price.toFixed(2)}</Text>
       </View>
-      <TouchableOpacity onPress={() => handleDeleteItem(item.id)}>
-        <IconButton iconName="heart" onPress={() => {}} />
-      </TouchableOpacity>
+
+      <IconButton
+        iconName="close-outline"
+        onPress={() => handleDeleteItem(item.id)}
+        color="red"
+      />
     </View>
   );
 
@@ -91,7 +94,7 @@ const CartProductsScreen = () => {
       />
       <View style={styles.footer}>
         <Text style={styles.totalText}>
-          총 가격: ${calculateTotalPrice().toFixed(2)}
+          총 가격: ￦{calculateTotalPrice().toFixed(2)}
         </Text>
         <TouchableOpacity
           style={styles.checkoutButton}

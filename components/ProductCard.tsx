@@ -1,30 +1,27 @@
 import React from "react";
-import { View, Text, Image, TouchableOpacity, StyleSheet, Pressable } from "react-native";
+import {
+  View,
+  Text,
+  Image,
+  TouchableOpacity,
+  StyleSheet,
+  Pressable,
+} from "react-native";
 import { Product, RootStackParamList } from "../src/static/const/type";
 import { deleteProduct } from "../src/utils/functions/productManage";
 import { StackScreenProps } from "@react-navigation/stack";
+import { useNavigation } from "@react-navigation/native";
+import { Ionicons } from "@expo/vector-icons";
 
 type Props = {
+  onPress: () => void;
   item: Product;
 };
 
-type NavigationProps = StackScreenProps<RootStackParamList, "Detail">;
-
-const ProductCard = ({ item, navigation }: Props & NavigationProps) => {
+const ProductCard = ({ onPress, item }: Props) => {
   return (
     <View style={styles.container}>
-      <TouchableOpacity
-        onPress={() => {
-          navigation.navigate("Detail", {
-            id: item.id,
-            imgs: item.imgs,
-            name: item.name,
-            price: item.price,
-            category: item.category,
-            like: item.like ?? 0,
-          });
-        }}
-      >
+      <TouchableOpacity onPress={onPress}>
         <Image style={styles.image} source={{ uri: item.imgs[0] }} />
       </TouchableOpacity>
       <View style={styles.content}>
@@ -32,6 +29,10 @@ const ProductCard = ({ item, navigation }: Props & NavigationProps) => {
 
         <Text style={styles.title}>{item.category}</Text>
         <Text style={styles.price}>{item.price}원</Text>
+
+        <Ionicons name="heart" color="red">
+          {item.like}
+        </Ionicons>
       </View>
       <TouchableOpacity
         style={styles.deleteButton}
@@ -45,6 +46,7 @@ const ProductCard = ({ item, navigation }: Props & NavigationProps) => {
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     marginHorizontal: 3,
     marginTop: 6,
     marginBottom: 25,

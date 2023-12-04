@@ -7,7 +7,7 @@ import ColoredButton from "../common/ColoredButton";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp, StackScreenProps } from "@react-navigation/stack";
 import { RootStackParamList } from "../../src/static/const/type";
-import { signOut } from "../../src/firebase/userManage";
+import { signOut } from "../api/firebase/userManage";
 
 const testHandler = () => {};
 const AccountScreen = () => {

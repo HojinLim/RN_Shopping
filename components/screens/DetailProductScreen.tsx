@@ -1,24 +1,58 @@
 import { Image, Pressable, StyleSheet, Text, View } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { StackNavigationProp, StackScreenProps } from "@react-navigation/stack";
 import { RootStackParamList } from "../../src/static/const/type";
+import {
+  changeProductState,
+  hasPushedLike,
+} from "../api/fireStore/userInteract";
+import { useRecoilValue } from "recoil";
+import { currentUserState } from "../../src/atom/currentUserState";
+import IconButton from "../IconButton";
+import useProductQuery from "../hooks/useProductQuery";
 
-type props = StackScreenProps<RootStackParamList, "Detail">;
+type DetailScreenProps = StackScreenProps<RootStackParamList, "Detail">;
+const DetailProductScreen = ({ navigation, route }: DetailScreenProps) => {
+  const { id, name, category, price, like, imgs } = route.params.item;
 
-const DetailProductScreen = ({ navigation, route }: props) => {
-  const { id, category, name, price, imgs, like } = route.params; // 제품 데이터는 navigation으로 전달됨
-
-  const [liked, setLiked] = useState(false);
+  const [isLiked, setIsLiked] = useState(false);
   const [addedToCart, setAddedToCart] = useState(false);
+  const currentUser = useRecoilValue(currentUserState);
+  const { updateProductMutation } = useProductQuery();
 
+  // 좋아요 클릭 핸들러
   const handleLikePress = () => {
-    // 좋아요 버튼이 눌렸을 때의 로직
-    setLiked(!liked);
+    // 로그인 상태면
+
+    if (currentUser) {
+      updateProductMutation.mutate({
+        uid: currentUser?.uid,
+        pid: id,
+        mode: "likedProducts",
+      });
+      setIsLiked((prev) => !prev);
+      // 아니면 로그인 화면으로
+    } else navigation.navigate("Login");
   };
+  useEffect(() => {
+    hasPushedLike(currentUser?.uid!, id, "likedProducts").then((isPushed) => {
+      try {
+        if (isPushed) {
+          console.log(isPushed);
+          setIsLiked(isPushed);
+        }
+      } catch {}
+    });
+  }, []);
 
   const handleAddToCartPress = () => {
     // 장바구니 추가 버튼이 눌렸을 때의 로직
-    setAddedToCart(true);
+
+    if (currentUser) {
+      setAddedToCart(true);
+    } else {
+      navigation.navigate("Login");
+    }
     // 추가된 항목을 서버에 업데이트하거나 다른 작업 수행
   };
   return (
@@ -31,17 +65,12 @@ const DetailProductScreen = ({ navigation, route }: props) => {
         <Text style={styles.likes}>좋아요: {like}</Text>
       </View>
       <View style={styles.buttonContainer}>
-        <Pressable
-          style={[
-            styles.likeButton,
-            { backgroundColor: liked ? "red" : "gray" },
-          ]}
+        <IconButton
+          iconName="heart"
           onPress={handleLikePress}
-        >
-          <Text style={styles.buttonText}>
-            {liked ? "좋아요 취소" : "좋아요"}
-          </Text>
-        </Pressable>
+          color={isLiked ? "red" : "black"}
+        />
+
         <Pressable
           style={[
             styles.addToCartButton,

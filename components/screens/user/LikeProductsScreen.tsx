@@ -1,16 +1,36 @@
 import { Alert, StyleSheet, Text, View, Image } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FlatList, TouchableOpacity } from "react-native-gesture-handler";
 import IconButton from "../../IconButton";
+import useUserInteractedItemsQuery from "../../hooks/useUserLikeQuery";
+import { currentUserState } from "../../../src/atom/currentUserState";
+import { useRecoilValue } from "recoil";
+import { Product } from "../../../src/static/const/type";
+import useProductQuery from "../../hooks/useProductQuery";
 
 type Props = {};
 
 const LikeProductsScreen = (props: Props) => {
-  const [likedProducts, setLikedProducts] = useState([
-    { id: "1", name: "Product 1" },
-    { id: "2", name: "Product 2" },
-    { id: "3", name: "Product 3" },
-  ]);
+  const user = useRecoilValue(currentUserState);
+
+  const [filteredProducts, setFilteredProducts] = useState<Product[]>();
+  const { data, isLoading, isError, refetch } = useUserInteractedItemsQuery(
+    user?.uid || "",
+    "likedProducts"
+  );
+  const { updateProductMutation } = useProductQuery();
+
+  useEffect(() => {
+    refetch();
+  }, []);
+
+  console.log(data);
+
+  useEffect(() => {
+    if (data) {
+      setFilteredProducts(data);
+    }
+  }, [data]);
 
   const handleDeleteItem = (itemId: string) => {
     Alert.alert(
@@ -22,10 +42,20 @@ const LikeProductsScreen = (props: Props) => {
           text: "삭제",
           onPress: () => {
             // 아이템 삭제 로직
-            const updatedList = likedProducts.filter(
-              (item) => item.id !== itemId
-            );
-            setLikedProducts(updatedList);
+
+            // 비동기 삭제가 안되기에 이렇게 상태처리
+            if (filteredProducts) {
+              const updatedList = filteredProducts.filter(
+                (item) => item.id !== itemId
+              );
+              setFilteredProducts(updatedList);
+            }
+
+            updateProductMutation.mutate({
+              uid: user!.uid,
+              pid: itemId,
+              mode: "likedProducts",
+            });
           },
         },
       ],
@@ -33,20 +63,22 @@ const LikeProductsScreen = (props: Props) => {
     );
   };
 
-  const renderLikeItem = ({ item }: { item: any }) => (
+  const renderLikeItem = ({ item }: { item: Product }) => (
     <View style={styles.itemContainer}>
-      <Image source={item.image} style={styles.itemImage} />
+      <Image source={{ uri: item.imgs[0] }} style={styles.itemImage} />
       <Text style={styles.itemText}>{item.name}</Text>
-      <TouchableOpacity onPress={() => handleDeleteItem(item.id)}>
-        <IconButton iconName="heart" onPress={() => {}} />
-      </TouchableOpacity>
+      <IconButton
+        iconName="heart"
+        color="red"
+        onPress={() => handleDeleteItem(item.id)}
+      />
     </View>
   );
 
   return (
     <View style={styles.container}>
       <FlatList
-        data={likedProducts}
+        data={filteredProducts}
         keyExtractor={(item) => item.id}
         renderItem={renderLikeItem}
         ListEmptyComponent={

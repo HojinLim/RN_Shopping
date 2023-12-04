@@ -6,7 +6,7 @@ import { View, Text, TextInput, Button, StyleSheet } from "react-native";
 
 import { useNavigation } from "@react-navigation/native";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../../src/firebase/firebase";
+import { auth } from "../api/firebase/firebase";
 import { ADMIN_ID, ADMIN_PASS } from "@env";
 import { RootStackParamList } from "../../src/static/const/type";
 

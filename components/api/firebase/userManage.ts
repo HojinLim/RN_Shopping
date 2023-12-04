@@ -2,8 +2,8 @@
 
 import "firebase/auth";
 import { auth } from "./firebase";
-import { User } from "../static/const/type";
-import { HJ_USER } from "../static/const/variable";
+import { User } from "../../../src/static/const/type";
+import { HJ_USER } from "../../../src/static/const/variable";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export const signOut = async () => {
@@ -27,6 +27,4 @@ export const isLogin = () => {
       console.log("에러");
     }
   });
-
-  // const userData = sessionStorage.getItem(HJ_USER);
 };
