@@ -8,11 +8,13 @@ import {
 
 import { useRecoilValue } from "recoil";
 
-import { USER_ITEMS_QUERY_KEY } from "./useUserLikeQuery";
-
 import { currentPushedLike } from "../../src/atom/currentPushedLike";
 import { currentUserState } from "../../src/atom/currentUserState";
-import { addProduct, deleteProduct, getAllProductData } from "../api/fireStore/dataManage";
+import {
+  addProduct,
+  deleteProduct,
+  getAllProductData,
+} from "../api/fireStore/dataManage";
 import { changeProductState } from "../api/fireStore/userInteract";
 import { Product } from "../../src/static/const/type";
 
@@ -48,6 +50,7 @@ const useProductQuery = () => {
   const updateProductMutation = useMutation({
     mutationFn: changeProductState,
     onMutate: async (newData) => {
+    
       await queryClient.cancelQueries({ queryKey: [ALL_PRODUCT_QUERY_KEY] });
 
       // 이전 값

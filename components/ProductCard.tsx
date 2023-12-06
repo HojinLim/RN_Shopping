@@ -34,12 +34,12 @@ const ProductCard = ({ onPress, item }: Props) => {
           {item.like}
         </Ionicons>
       </View>
-      <TouchableOpacity
+      {/* <TouchableOpacity
         style={styles.deleteButton}
         onPress={() => deleteProduct(item.id)}
       >
         <Text>삭제테스트</Text>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
     </View>
   );
 };

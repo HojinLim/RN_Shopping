@@ -60,10 +60,7 @@ const AdminScreen = (props: Props) => {
     if (result.canceled) {
       return null; // 이미지 업로드 취소한 경우
     }
-    // 이미지 업로드 결과 및 이미지 경로 업데이트
-    // const data = await fetch(image[0]);
-    // const blob = await data.blob();
-    // console.log(blob)
+
 
     console.log(result);
     setImageUrl((prev) => [...prev, result.assets[0].uri]);

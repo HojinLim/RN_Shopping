@@ -67,6 +67,7 @@ const getUserInteractedItems = async ({
     const userInteractDocRef = doc(db, "user_interact", uid);
     const userInteractDocSnapshot = await getDoc(userInteractDocRef);
 
+
     if (userInteractDocSnapshot.exists()) {
       const likeList = userInteractDocSnapshot.data()?.[mode] || [];
       console.log("User Likes:", likeList);
@@ -112,7 +113,10 @@ const getUserInteractedItems = async ({
   }
 };
 
-// 임의의 이름의 데이터를 문서로 저장
+/**
+ * Firebase에 상품을 임의의 pid로 저장합니다.
+ * @param param0
+ */
 const addProduct = async ({
   name,
   price,

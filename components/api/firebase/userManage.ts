@@ -5,18 +5,7 @@ import { auth } from "./firebase";
 import { User } from "../../../src/static/const/type";
 import { HJ_USER } from "../../../src/static/const/variable";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
-export const signOut = async () => {
-  try {
-    await auth.signOut();
-    sessionStorage.removeItem(HJ_USER);
-    alert("로그아웃 완료!");
-  } catch (error) {
-    alert(error);
-    console.error("Error signing out:", error);
-    throw error;
-  }
-};
+import { Alert } from "react-native";
 
 export const isLogin = () => {
   const data = AsyncStorage.getItem(HJ_USER);

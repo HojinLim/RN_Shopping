@@ -1,13 +1,14 @@
 import { Alert, Image, Pressable, StyleSheet, Text, View } from "react-native";
 import React from "react";
 import { useRecoilValue } from "recoil";
-import { currentUserState } from "../../src/atom/currentUserState";
-import LoginScreen from "./LoginScreen";
-import ColoredButton from "../common/ColoredButton";
+import { currentUserState } from "../../../src/atom/currentUserState";
+import LoginScreen from "../LoginScreen";
+import ColoredButton from "../../common/ColoredButton";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp, StackScreenProps } from "@react-navigation/stack";
-import { RootStackParamList } from "../../src/static/const/type";
-import { signOut } from "../api/firebase/userManage";
+import { RootStackParamList } from "../../../src/static/const/type";
+import { signOut } from "../../../src/utils/functions/user";
+// import { signOut } from "../../api/firebase/userManage";
 
 const testHandler = () => {};
 const AccountScreen = () => {
@@ -40,7 +41,7 @@ const AccountScreen = () => {
         <View style={styles.container}>
           <Text style={styles.heading}>내 정보</Text>
           <Image
-            source={require("../../assets/test.png")}
+            source={require("../../../assets/test.png")}
             style={styles.itemImage}
           />
 

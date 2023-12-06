@@ -11,13 +11,14 @@ export interface Product {
   id: string;
   name: string;
   category: string;
-  price: number;
+  price: string|number;
   imgs: string[];
   color?: string;
   size?: string;
   brand?: string;
   inventory?: number;
   like?: number;
+  quantity?: number;
 }
 
 export type RootStackParamList = {

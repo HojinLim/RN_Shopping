@@ -1,4 +1,11 @@
-import { Alert, StyleSheet, Text, View, Image } from "react-native";
+import {
+  Alert,
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  ActivityIndicator,
+} from "react-native";
 import React, { useEffect, useState } from "react";
 import { FlatList, TouchableOpacity } from "react-native-gesture-handler";
 import IconButton from "../../IconButton";
@@ -14,17 +21,16 @@ const LikeProductsScreen = (props: Props) => {
   const user = useRecoilValue(currentUserState);
 
   const [filteredProducts, setFilteredProducts] = useState<Product[]>();
-  const { data, isLoading, isError, refetch } = useUserInteractedItemsQuery(
-    user?.uid || "",
-    "likedProducts"
-  );
+  const { data, isLoading, isError, refetch, isFetching, isFetchedAfterMount } =
+    useUserInteractedItemsQuery(user?.uid || "", "likedProducts");
   const { updateProductMutation } = useProductQuery();
 
   useEffect(() => {
     refetch();
+    // if (data) {
+    //   setFilteredProducts(data);
+    // }
   }, []);
-
-  console.log(data);
 
   useEffect(() => {
     if (data) {
@@ -63,10 +69,21 @@ const LikeProductsScreen = (props: Props) => {
     );
   };
 
+  if (isLoading || isFetching) {
+    return <ActivityIndicator />;
+  }
+
+  if (isError) {
+    console.log("에러가 발생했습니다");
+  }
+
   const renderLikeItem = ({ item }: { item: Product }) => (
     <View style={styles.itemContainer}>
       <Image source={{ uri: item.imgs[0] }} style={styles.itemImage} />
+
       <Text style={styles.itemText}>{item.name}</Text>
+      <Text style={styles.itemDetailText}>￦{item.price}</Text>
+
       <IconButton
         iconName="heart"
         color="red"
@@ -113,6 +130,10 @@ const styles = StyleSheet.create({
   },
   itemText: {
     fontSize: 16,
+  },
+  itemDetailText: {
+    fontSize: 12,
+    color: "gray",
   },
   emptyText: {
     textAlign: "center",

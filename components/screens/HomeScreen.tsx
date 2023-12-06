@@ -8,7 +8,7 @@ import {
 } from "react-native";
 import React, { useEffect, useState } from "react";
 
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { currentUserState } from "../../src/atom/currentUserState";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../api/firebase/firebase";
@@ -26,17 +26,15 @@ import ProductCard from "../ProductCard";
 import { ScrollView } from "react-native-gesture-handler";
 import { StackScreenProps } from "@react-navigation/stack";
 
-import { RouteProp } from "@react-navigation/native";
 import useProductQuery from "../hooks/useProductQuery";
 import MenuHeader from "../MenuHeader";
 import { currentCategory } from "../../src/atom/currentCategory";
-import { useQuery } from "@tanstack/react-query";
 
 type Props = {};
 type HomeScreenProps = StackScreenProps<RootStackParamList, "Home">;
 
 const HomeScreen = ({ navigation, route }: HomeScreenProps) => {
-  const [currentUser, setCurrentUser] = useRecoilState(currentUserState);
+  const setCurrentUser = useSetRecoilState(currentUserState);
   const curretCategory = useRecoilValue(currentCategory);
   const [filteredData, setFilteredData] = useState<Product[] | undefined>([]);
 
@@ -83,11 +81,7 @@ const HomeScreen = ({ navigation, route }: HomeScreenProps) => {
   return (
     <View style={styles.outerContainer}>
       <MenuHeader />
-      <Text>
-        {currentUser
-          ? currentUser?.email + "님, 안녕하세요!"
-          : "로그인 정보 없음"}
-      </Text>
+
       <View style={styles.productsContainer}>
         <ScrollView>
           {filteredData?.map((item: Product, key: number) => (
@@ -122,5 +116,6 @@ const styles = StyleSheet.create({
   },
   productsContainer: {
     padding: 15,
+    marginBottom: 50,
   },
 });

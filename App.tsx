@@ -13,11 +13,11 @@ import {
   BottomTabNavigationProp,
   createBottomTabNavigator,
 } from "@react-navigation/bottom-tabs";
-import { RecoilRoot } from "recoil";
+import { RecoilRoot, useRecoilValue } from "recoil";
 import IconButton from "./components/IconButton";
 import { signOut } from "./src/utils/functions/user";
-import { View } from "react-native";
-import AccountScreen from "./components/screens/AccountScreen";
+import { Text, View } from "react-native";
+import AccountScreen from "./components/screens/user/AccountScreen";
 import DetailProductScreen from "./components/screens/DetailProductScreen";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import {
@@ -27,6 +27,8 @@ import {
 } from "./src/static/const/type";
 import LikeProductsScreen from "./components/screens/user/LikeProductsScreen";
 import CartProductsScreen from "./components/screens/user/CartProductsScreen";
+
+import MainRightHeader from "./components/Navigator/MainRightHeader";
 
 const Stack = createStackNavigator<RootStackParamList>();
 const Tab = createBottomTabNavigator<RootTabParamList>();
@@ -42,8 +44,11 @@ const IntroHeaderRightButton = ({ navigation }: { navigation: any }) => (
   </View>
 );
 
-const TabNavigator = ({ navigation }: { navigation: any }) => {
-  // 바로 이부분
+const TabNavigator = ({
+  navigation,
+}: {
+  navigation: BottomTabNavigationProp<RootTabParamList>;
+}) => {
   return (
     <Tab.Navigator
       screenOptions={{
@@ -60,6 +65,9 @@ const TabNavigator = ({ navigation }: { navigation: any }) => {
         name="Home"
         component={HomeScreen}
         options={{
+          headerRight: () => (
+            <MainRightHeader onPress={() => navigation.navigate("Account")} />
+          ),
           // 탭 아이콘
           tabBarIcon: ({ color, size }) => (
             <IconButton

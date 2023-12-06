@@ -10,10 +10,11 @@ import { useRecoilValue } from "recoil";
 import { currentUserState } from "../../src/atom/currentUserState";
 import IconButton from "../IconButton";
 import useProductQuery from "../hooks/useProductQuery";
+import { debounce } from "lodash";
 
 type DetailScreenProps = StackScreenProps<RootStackParamList, "Detail">;
 const DetailProductScreen = ({ navigation, route }: DetailScreenProps) => {
-  const { id, name, category, price, like, imgs } = route.params.item;
+  const { id: pid, name, category, price, like, imgs } = route.params.item;
 
   const [isLiked, setIsLiked] = useState(false);
   const [addedToCart, setAddedToCart] = useState(false);
@@ -27,29 +28,50 @@ const DetailProductScreen = ({ navigation, route }: DetailScreenProps) => {
     if (currentUser) {
       updateProductMutation.mutate({
         uid: currentUser?.uid,
-        pid: id,
+        pid,
         mode: "likedProducts",
       });
+
       setIsLiked((prev) => !prev);
-      // 아니면 로그인 화면으로
+      // 로그인 상태 아니면, 로그인 화면으로
     } else navigation.navigate("Login");
   };
+
   useEffect(() => {
-    hasPushedLike(currentUser?.uid!, id, "likedProducts").then((isPushed) => {
+    hasPushedLike(currentUser?.uid!, pid, "likedProducts").then((isPushed) => {
       try {
         if (isPushed) {
-          console.log(isPushed);
           setIsLiked(isPushed);
         }
       } catch {}
     });
+
+    // 첫 랜더링 시 장바구니 여부 확인
+    if (currentUser) {
+      hasPushedLike(currentUser?.uid!, pid!, "addedProducts").then((pushed) => {
+        try {
+          console.log(pushed!!);
+          setAddedToCart(pushed ?? false);
+        } catch {}
+      });
+    }
   }, []);
 
-  const handleAddToCartPress = () => {
+  const { updateBasketMutation } = useProductQuery();
+
+  const handleAddToCartPress = (pid: string) => {
     // 장바구니 추가 버튼이 눌렸을 때의 로직
 
     if (currentUser) {
-      setAddedToCart(true);
+      if (!addedToCart) {
+        updateBasketMutation.mutate({
+          uid: currentUser?.uid,
+          pid,
+          mode: "addedProducts",
+        });
+
+        setAddedToCart(true);
+      }
     } else {
       navigation.navigate("Login");
     }
@@ -62,12 +84,12 @@ const DetailProductScreen = ({ navigation, route }: DetailScreenProps) => {
         <Text style={styles.name}>{name}</Text>
         <Text style={styles.category}>{category}</Text>
         <Text style={styles.price}>가격: {price}￦</Text>
-        <Text style={styles.likes}>좋아요: {like}</Text>
+        {/* <Text style={styles.likes}>좋아요: {like}</Text> */}
       </View>
       <View style={styles.buttonContainer}>
         <IconButton
           iconName="heart"
-          onPress={handleLikePress}
+          onPress={debounce(handleLikePress, 250)}
           color={isLiked ? "red" : "black"}
         />
 
@@ -76,7 +98,7 @@ const DetailProductScreen = ({ navigation, route }: DetailScreenProps) => {
             styles.addToCartButton,
             { backgroundColor: addedToCart ? "green" : "blue" },
           ]}
-          onPress={handleAddToCartPress}
+          onPress={() => handleAddToCartPress(pid)}
         >
           <Text style={styles.buttonText}>
             {addedToCart ? "장바구니에 추가됨" : "장바구니에 추가"}

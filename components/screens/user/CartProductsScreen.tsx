@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   FlatList,
   View,
@@ -7,9 +7,17 @@ import {
   TouchableOpacity,
   Alert,
   Image,
+  ActivityIndicator,
+  TextInput,
 } from "react-native";
 
 import IconButton from "../../IconButton";
+import useUserInteractedItemsQuery from "../../hooks/useUserLikeQuery";
+import { useRecoilValue } from "recoil";
+import { currentUserState } from "../../../src/atom/currentUserState";
+import { Product } from "../../../src/static/const/type";
+import { comma, uncomma } from "../../../src/utils/functions/number";
+import useProductQuery from "../../hooks/useProductQuery";
 
 const CartProductsScreen = () => {
   const [cartItems, setCartItems] = useState([
@@ -30,23 +38,59 @@ const CartProductsScreen = () => {
     {
       id: "3",
       name: "Product 3",
-
       quantity: 3,
       price: 25.0,
     },
   ]);
-  const calculateTotalPrice = () => {
-    return cartItems.reduce(
-      (total, item) => total + item.quantity * item.price,
-      0
-    );
+  const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
+  const user = useRecoilValue(currentUserState);
+  const { data, isLoading, isError, refetch, isFetching, isPending } =
+    useUserInteractedItemsQuery(user?.uid || "", "addedProducts");
+  const { updateBasketMutation } = useProductQuery();
+  const [total, setTotal] = useState("");
+
+  const makeTotal = () => {
+    const sum = filteredProducts?.reduce((acc, cur) => {
+      const price = parseInt(uncomma(cur.price as string));
+      return acc + price;
+    }, 0);
+
+    setTotal(comma(sum + ""));
   };
+
+  useEffect(() => {
+    refetch();
+  }, []);
+
+  useEffect(() => {
+    if (data) {
+      setFilteredProducts(data);
+    }
+    if (filteredProducts !== null) {
+      makeTotal();
+    }
+  }, [data]); //data, filteredProducts
+
+  if (isLoading || isFetching || isPending) {
+    return <ActivityIndicator />;
+  }
+
+  if (isError) {
+    Alert.alert("에러가 발생했습니다");
+  }
+
+  // const calculateTotalPrice = () => {
+  //   return cartItems.reduce(
+  //     (total, item) => total + item.quantity * item.price,
+  //     0
+  //   );
+  // };
   // 결제 완료 핸들러
   const handleCheckout = () => {
     Alert.alert("결제 완료", "결제가 완료되었습니다.");
   };
 
-  const handleDeleteItem = (itemId: string) => {
+  const handleDeleteItem = (itemId: string, name: string) => {
     Alert.alert(
       "삭제 확인",
       "이 상품을 장바구니에서 삭제하시겠습니까?",
@@ -56,27 +100,58 @@ const CartProductsScreen = () => {
           text: "삭제",
           onPress: () => {
             // 아이템 삭제 로직
-            const updatedList = cartItems.filter((item) => item.id !== itemId);
-            setCartItems(updatedList);
+            updateBasketMutation.mutate({
+              uid: user!.uid,
+              pid: itemId,
+              mode: "addedProducts",
+            });
+
+            Alert.alert(name, "삭제완료");
+            const updatedList = filteredProducts.filter(
+              (item) => item.id !== itemId
+            );
+            setFilteredProducts(updatedList);
           },
         },
       ],
       { cancelable: false }
     );
   };
+  const minusQuantity = (id: string) => {
+    // filteredProducts에서 해당 아이디를 가진 제품을 찾아서 quantity를 1 감소시킵니다.
+    setFilteredProducts((prev) =>
+      prev.map((product) =>
+        product.id === id
+          ? { ...product, quantity: Math.max(0, product.quantity! - 1) }
+          : product
+      )
+    );
+  };
+  const plusQuantity = () => {};
 
-  const renderCartItem = ({ item }: { item: any }) => (
+  const renderCartItem = ({ item }: { item: Product }) => (
     <View style={styles.itemContainer}>
-      <Image source={item.image} style={styles.itemImage} />
+      <Image source={{ uri: item.imgs[0] }} style={styles.itemImage} />
       <View style={styles.itemDetails}>
         <Text style={styles.itemName}>{item.name}</Text>
         <Text style={styles.itemSubtitle}>수량: {item.quantity}</Text>
-        <Text style={styles.itemSubtitle}>가격: ￦{item.price.toFixed(2)}</Text>
+
+        <Text style={styles.itemSubtitle}>가격: ￦{item.price}</Text>
+      </View>
+      <View style={styles.changeQuantityContainer}>
+        <IconButton
+          iconName="remove"
+          color="black"
+          onPress={() => minusQuantity(item.id)}
+        />
+        <Text style={styles.quantityText}>0</Text>
+
+        <IconButton iconName="add" color="black" onPress={plusQuantity} />
       </View>
 
       <IconButton
         iconName="close-outline"
-        onPress={() => handleDeleteItem(item.id)}
+        onPress={() => handleDeleteItem(item.id, item.name)}
         color="red"
       />
     </View>
@@ -85,7 +160,7 @@ const CartProductsScreen = () => {
   return (
     <View style={styles.container}>
       <FlatList
-        data={cartItems}
+        data={filteredProducts}
         keyExtractor={(item) => item.id}
         renderItem={renderCartItem}
         ListEmptyComponent={
@@ -93,9 +168,7 @@ const CartProductsScreen = () => {
         }
       />
       <View style={styles.footer}>
-        <Text style={styles.totalText}>
-          총 가격: ￦{calculateTotalPrice().toFixed(2)}
-        </Text>
+        <Text style={styles.totalText}>총 가격: ￦{total}</Text>
         <TouchableOpacity
           style={styles.checkoutButton}
           onPress={handleCheckout}
@@ -164,6 +237,15 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontSize: 16,
     fontWeight: "bold",
+  },
+  changeQuantityContainer: {
+    flexDirection: "row",
+  },
+  quantityText: {
+    borderColor: "black",
+    borderWidth: 0.5,
+    textAlign: "center",
+    padding: 2,
   },
 });
 
