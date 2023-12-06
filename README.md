@@ -1,9 +1,6 @@
-
-
-<img src="https://capsule-render.vercel.app/api?type=waving&color=BDBDC8&height=150&section=footer" >hi</img
-
 # ``HJ MALL`` :tshirt:
 
+<img src="https://capsule-render.vercel.app/api?type=waving&color=BDBDC8&height=150&section=footer" />
 
 ## 프로젝트 소개
 
