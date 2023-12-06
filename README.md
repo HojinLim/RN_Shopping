@@ -6,7 +6,7 @@
 
 다양한 옷을 구매할 수 있는 사이트입니다.
 
-**배포 링크**: https://hkmall-one.vercel.app/
+**배포 링크**: https://
 
 ***
 
