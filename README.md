@@ -12,7 +12,7 @@
 
 ### :boxing_glove: 개발기간
 
-**(23.11.20~23.12.05)**
+**(23.11.20~ ing)**
 
 <br/><br/>
 
@@ -39,11 +39,16 @@
 
 | 작업                                       | 미리보기                           |
 | ------------------------------------------ | ----------------------------- |
-| **메인 페이지**                           |  ![메인페이지](https://github.com/CTDKSKM/hkmall/assets/69897998/1e8a4f2a-8985-4b70-a02f-a016a6e3caab)|
-| **로그인 페이지**                         |  ![로그인페이지](https://github.com/CTDKSKM/hkmall/assets/69897998/ed88940f-47d3-450a-ba96-04ab0cf0346a)|
-| **장바구니 추가**                         |  ![장바구니](https://github.com/CTDKSKM/hkmall/assets/69897998/f0ec0c51-bbac-4916-b3df-eacbd11c72b4)|
-| **장바구니 & 좋아요 품목 삭제**        |    ![삭제](https://github.com/CTDKSKM/hkmall/assets/69897998/7788409b-cf5c-40e7-94ff-91d6ad25d373)|
-| **제품 등록(관리자 전용)**                |  ![제품 추가](https://github.com/CTDKSKM/hkmall/assets/69897998/7581df85-e702-4340-baf1-5c419dad1ee7) |
+| **메인 페이지**                           |  ![메인페이지]|![a1](https://github.com/HojinLim/RN_Shopping/assets/69897998/54dcec80-99ec-4aa2-a4d4-999282d8976b)
+
+| **상세 페이지**                         |  ![로그인페이지]|![a2](https://github.com/HojinLim/RN_Shopping/assets/69897998/f48f298c-885f-4252-b267-a27d8124d786)
+
+| **내 정보 페이지**                         |  ![장바구니]|![a3](https://github.com/HojinLim/RN_Shopping/assets/69897998/28254e73-7c37-4a2b-b9ca-e2fd261a292e)
+
+| **좋아요 페이지**        |    ![삭제]|![a4](https://github.com/HojinLim/RN_Shopping/assets/69897998/11a93bea-876c-45d8-86b8-d2d0d88b76fb)
+
+| **장바구니 페이지**                |  ![제품 추가] |![a5](https://github.com/HojinLim/RN_Shopping/assets/69897998/c53c4841-58fd-45a0-a5bb-bc1f77296d34)
+
 
 ---
 
