@@ -41,12 +41,12 @@ const HomeScreen = ({ navigation, route }: HomeScreenProps) => {
   const { isError, data, error, isLoading } = useProductQuery();
 
   useEffect(() => {
-    if (curretCategory == "전체") {
+    if (curretCategory == "전체" && data) {
       console.log(filteredData);
       setFilteredData(data);
       return;
     }
-    if (!isError) {
+    if (!isError && data) {
       const arr = data?.filter((arr) => arr.category == curretCategory);
       setFilteredData(arr);
     }

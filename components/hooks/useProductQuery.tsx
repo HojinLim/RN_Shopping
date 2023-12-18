@@ -28,6 +28,7 @@ const useProductQuery = () => {
   const { isLoading, isFetching, isError, data, error } = useQuery({
     queryKey: [ALL_PRODUCT_QUERY_KEY],
     queryFn: getAllProductData,
+  //  queryClient.removeQueries({ queryKey: "A" })
     // staleTime: 60 * 1000,
   });
   const addProductMutation = useMutation({
@@ -41,6 +42,7 @@ const useProductQuery = () => {
     mutationFn: changeProductState,
 
     onSuccess: async () => {
+      
       await queryClient.invalidateQueries({
         queryKey: [ALL_PRODUCT_QUERY_KEY],
       });

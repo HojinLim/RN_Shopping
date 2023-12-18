@@ -34,7 +34,7 @@ module.exports = {
       "module:react-native-dotenv",
       {
         moduleName: "@env",
-        path: ".env",
+        path: ".env.local",
         safe: false,
         aloowUndefined: true,
       },

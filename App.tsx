@@ -29,6 +29,10 @@ import LikeProductsScreen from "./components/screens/user/LikeProductsScreen";
 import CartProductsScreen from "./components/screens/user/CartProductsScreen";
 
 import MainRightHeader from "./components/Navigator/MainRightHeader";
+import { Ionicons } from "@expo/vector-icons";
+import CameraScreen from "./components/screens/CameraScreen";
+import TestScreen from "./components/screens/TestScreen";
+import Duplicate from "./components/screens/user/Duplicate";
 
 const Stack = createStackNavigator<RootStackParamList>();
 const Tab = createBottomTabNavigator<RootTabParamList>();
@@ -65,6 +69,14 @@ const TabNavigator = ({
         name="Home"
         component={HomeScreen}
         options={{
+          headerLeft: () => (
+            <Ionicons
+              name="ios-home-outline"
+              size={24}
+              color="black"
+              style={{ marginLeft: 16 }}
+            />
+          ),
           headerRight: () => (
             <MainRightHeader onPress={() => navigation.navigate("Account")} />
           ),
@@ -81,6 +93,19 @@ const TabNavigator = ({
       <Tab.Screen
         name="Account"
         component={AccountScreen}
+        options={{
+          tabBarIcon: () => (
+            <IconButton
+              iconName="person-circle-outline"
+              onPress={() => {}}
+              color="black"
+            />
+          ),
+        }}
+      ></Tab.Screen>
+      <Tab.Screen
+        name="Test"
+        component={TestScreen}
         options={{
           tabBarIcon: () => (
             <IconButton
@@ -134,6 +159,17 @@ const App = () => {
             <Stack.Screen name="Detail" component={DetailProductScreen} />
             <Stack.Screen name="Like" component={LikeProductsScreen} />
             <Stack.Screen name="Cart" component={CartProductsScreen} />
+            <Stack.Screen
+              options={{ headerShown: false }}
+              name="Camera"
+              component={CameraScreen}
+            />
+            {/* 테스트 */}
+            <Stack.Screen
+              options={{ headerShown: false }}
+              name="Duplicate"
+              component={Duplicate}
+            />
             <Stack.Group>
               <Stack.Screen name="Login" component={LoginScreen} />
             </Stack.Group>

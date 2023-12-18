@@ -22,6 +22,8 @@ const firebaseConfig = {
   appId: FIREBASE_APP_ID,
 };
 
+
+
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 getReactNativePersistence;

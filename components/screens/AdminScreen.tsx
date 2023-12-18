@@ -1,4 +1,5 @@
 import {
+  ActivityIndicator,
   Button,
   Image,
   Platform,
@@ -16,6 +17,14 @@ import * as ImagePicker from "expo-image-picker";
 import { inputNumberFormat } from "../../src/utils/functions/number";
 import { addData, uploadImage } from "../../src/utils/functions/productManage";
 import PreviewImageContainer from "../PreviewImageContainer";
+import IconButton from "../IconButton";
+import { globalStyles } from "../../src/css/css";
+import {
+  CommonScreenProp,
+  RootStackParamList,
+} from "../../src/static/const/type";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { useNavigation } from "@react-navigation/native";
 
 type Props = {};
 
@@ -29,7 +38,8 @@ const AdminScreen = (props: Props) => {
   // 현재 이미지 주소
   const [imageUrls, setImageUrl] = useState<string[]>([]);
   // 권한 요청을 위한 hooks
-  const [status, requestPermission] = ImagePicker.useMediaLibraryPermissions();
+  const [status, requestImagePermission] =
+    ImagePicker.useMediaLibraryPermissions();
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
   const [blobs, setBlobs] = useState<Blob[]>([]);
@@ -45,7 +55,7 @@ const AdminScreen = (props: Props) => {
   const setImage = async () => {
     // 권한 확인 코드: 권한 없으면 물어보고, 승인하지 않으면 함수 종료
     if (!status?.granted) {
-      const permission = await requestPermission();
+      const permission = await requestImagePermission();
       if (!permission.granted) {
         return null;
       }
@@ -60,7 +70,6 @@ const AdminScreen = (props: Props) => {
     if (result.canceled) {
       return null; // 이미지 업로드 취소한 경우
     }
-
 
     console.log(result);
     setImageUrl((prev) => [...prev, result.assets[0].uri]);
@@ -119,6 +128,16 @@ const AdminScreen = (props: Props) => {
     setImageUrl(filteredImages);
   };
 
+  // 카메라 관리
+
+  const navi = useNavigation<CommonScreenProp>();
+
+  const cameraHandler = () => {
+    // 권한이 있음
+
+    navi.navigate("Camera");
+  };
+
   return (
     <View>
       <View style={styles.pickerContainer}>
@@ -167,9 +186,21 @@ const AdminScreen = (props: Props) => {
         )}
       </View>
       {/* 이미지 업로드 영역 */}
-      <Pressable onPress={setImage}>
-        <Text>이미지 업로드하기</Text>
-      </Pressable>
+
+      <View style={globalStyles.rowContainer}>
+        <IconButton
+          onPress={setImage}
+          color="black"
+          iconName={"image-outline"}
+          size={40}
+        />
+        <IconButton
+          onPress={cameraHandler}
+          color="black"
+          iconName={"camera-outline"}
+          size={40}
+        />
+      </View>
 
       <PreviewImageContainer
         imageUrls={imageUrls}

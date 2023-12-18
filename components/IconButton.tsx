@@ -6,12 +6,19 @@ type Props = {
   onPress: () => void;
   iconName: any;
   color: string;
+  size?: number;
 };
 
-const IconButton = ({ color, iconName, onPress }: Props) => {
+const IconButton = ({ color, iconName, onPress, size }: Props) => {
   return (
     <Pressable>
-      <Ionicons name={iconName} onPress={onPress} size={24} color={color} />
+      <Ionicons
+        name={iconName}
+        onPress={onPress}
+        // 기본값: 24 / 설정값: size
+        size={size ?? 24}
+        color={color}
+      />
     </Pressable>
   );
 };

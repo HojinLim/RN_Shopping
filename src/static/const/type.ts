@@ -1,3 +1,4 @@
+import { StackNavigationProp } from "@react-navigation/stack";
 import { QueryClient } from "@tanstack/react-query";
 
 export interface User {
@@ -11,7 +12,7 @@ export interface Product {
   id: string;
   name: string;
   category: string;
-  price: string|number;
+  price: string | number;
   imgs: string[];
   color?: string;
   size?: string;
@@ -30,9 +31,11 @@ export type RootStackParamList = {
   Account: undefined;
   Like: undefined;
   Cart: undefined;
+  Camera: undefined;
   Detail: {
     item: Product;
   };
+  Duplicate: undefined;
 };
 
 export type RootTabParamList = {
@@ -41,6 +44,7 @@ export type RootTabParamList = {
   Detail: {
     item: Product;
   };
+  Test: undefined
 };
 
 const queryClient = new QueryClient({
@@ -52,5 +56,7 @@ const queryClient = new QueryClient({
     },
   },
 });
+
+export type CommonScreenProp = StackNavigationProp<RootStackParamList>;
 
 export { queryClient };

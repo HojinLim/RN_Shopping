@@ -4,8 +4,6 @@ import React, { useState } from "react";
 import { View, Text, TextInput, Button, StyleSheet } from "react-native";
 import { StackNavigationProp, StackScreenProps } from "@react-navigation/stack";
 import { useNavigation } from "@react-navigation/native";
-
-import { API_KEY } from "@env";
 import { createUserWithEmailAndPassword, signOut } from "firebase/auth";
 import { auth } from "../api/firebase/firebase";
 import { FirebaseError } from "firebase/app";

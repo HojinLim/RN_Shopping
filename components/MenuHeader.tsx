@@ -17,7 +17,7 @@ const MenuHeader = (props: Props) => {
 
   return (
     <View style={styles.header}>
-      {["전체", "상의", "하의", "신발", "모자", "액세서리"].map((category) => (
+      {["전체", "상의", "하의", "신발", "모자", "악세사리"].map((category) => (
         <Pressable
           key={category}
           style={({ pressed }) => [
