@@ -148,6 +148,11 @@ const styles = StyleSheet.create({
   buttonContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
+    position: "absolute",
+    bottom: 0,
+    width: "100%",
+    alignItems: "center",
+    margin: 10,
   },
   likeButton: {
     flex: 1,

@@ -61,6 +61,7 @@ const Duplicate = (props: Props) => {
         alert("사진 저장 완료! 🎉");
         setImageUri(null);
         console.log("saved successfully");
+        navi.navigate("Admin", { uri: imageUri });
       } catch (error) {
         console.log(error);
       }
@@ -165,6 +166,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     backgroundColor: "#000",
     padding: 8,
+    // 상태바 높이만큼 마진값
     paddingTop: StatusBar.currentHeight,
   },
   camera: {

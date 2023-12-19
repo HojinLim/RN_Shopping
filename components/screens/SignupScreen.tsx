@@ -8,6 +8,12 @@ import { createUserWithEmailAndPassword, signOut } from "firebase/auth";
 import { auth } from "../api/firebase/firebase";
 import { FirebaseError } from "firebase/app";
 import { RootStackParamList } from "../../src/static/const/type";
+import {
+  convertUrIToBlob,
+  downloadBasicProfileImage,
+  uploadProfileImage,
+  uploadStringProfileImage,
+} from "@components/api/firebase/storage/storage";
 
 const SignupScreen = () => {
   const [email, setEmail] = useState("");
@@ -21,7 +27,23 @@ const SignupScreen = () => {
     }
 
     try {
-      await createUserWithEmailAndPassword(auth, email, password);
+      const credentail = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      const uploadBasicImage = async () => {
+        try {
+          const imageUrl = await downloadBasicProfileImage();
+          const blob = await convertUrIToBlob(imageUrl);
+          uploadStringProfileImage(blob, credentail.user.uid);
+          console.log(imageUrl);
+        } catch (error) {
+          console.error("Error fetching profile image:", error);
+        }
+      };
+      uploadBasicImage();
+
       alert("회원가입 완료!");
       signOut(auth);
       navigation.navigate("Login");

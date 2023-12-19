@@ -2,13 +2,21 @@
 
 import { StackNavigationProp } from "@react-navigation/stack";
 import React, { useState } from "react";
-import { View, Text, TextInput, Button, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  TextInput,
+  Button,
+  StyleSheet,
+  ImageBackground,
+} from "react-native";
 
 import { useNavigation } from "@react-navigation/native";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../api/firebase/firebase";
 import { ADMIN_ID, ADMIN_PASS } from "@env";
 import { RootStackParamList } from "../../src/static/const/type";
+import TextButton from "../common/TextButton";
 
 type loginScreenProp = StackNavigationProp<RootStackParamList>;
 
@@ -17,15 +25,14 @@ const LoginScreen = () => {
   const [password, setPassword] = useState("");
   const navigation = useNavigation<loginScreenProp>();
 
-  type Props = {};
   const isAdmin = () => {
     if (email == ADMIN_ID && password == ADMIN_PASS) {
       alert("안녕하세요. 관리자님!");
-      navigation.navigate("Admin");
+      navigation.navigate("Admin", {});
       return true;
     } else return false;
   };
-  const handleLogin = async (props: Props) => {
+  const handleLogin = async () => {
     if (isAdmin()) return;
 
     try {
@@ -62,8 +69,12 @@ const LoginScreen = () => {
         secureTextEntry
       />
       <View style={styles.buttonContainer}>
-        <Button title="Login" onPress={handleLogin} />
-        <Button title="Signup" onPress={goSignup} />
+        <TextButton
+          title="Login"
+          onPress={handleLogin}
+          customStyle={{ marginHorizontal: 10 }}
+        />
+        <TextButton title="Signup" onPress={goSignup} />
       </View>
     </View>
   );

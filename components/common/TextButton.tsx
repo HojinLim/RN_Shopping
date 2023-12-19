@@ -7,53 +7,45 @@ import {
 } from "react-native";
 import React from "react";
 import { Ionicons } from "@expo/vector-icons";
-import IconButton from "../IconButton";
 
 type Props = {
-  iconName: any;
-  btnColor?: string;
   size?: number;
-  text?: string;
-  onPress: () => void;
+  title: string;
+  onPress?: () => void;
+
   fontColor?: string;
-  bgColor?: string;
+  customStyle?: object;
 };
 
-const TextIconButton = ({
-  bgColor,
-  btnColor,
-  iconName,
+const TextButton = ({
   size,
-  text,
+  title,
   onPress,
   fontColor,
-}: Props) => {
+  customStyle,
+}: // asyncPress,
+Props) => {
   return (
-    <TouchableOpacity
-      style={[styles.container, bgColor ? { backgroundColor: bgColor } : null]}
-      onPress={onPress}
-    >
-      <Ionicons
-        name={iconName}
-        // 기본값: 24 / 설정값: size
-        size={size ?? 24}
-        color={btnColor ? btnColor : "white"}
-      />
+    <TouchableOpacity style={[styles.container, customStyle]} onPress={onPress}>
       <Text style={[styles.text, { color: fontColor ? fontColor : "white" }]}>
-        {text}
+        {title}
       </Text>
     </TouchableOpacity>
   );
 };
 
-export default TextIconButton;
+export default TextButton;
 
 const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    borderRadius: 8,
+    backgroundColor: "#499af2",
+    height: "auto",
+    marginHorizontal: "auto",
+    borderRadius: 5,
+    padding: 10,
   },
   text: {
     fontSize: 16,

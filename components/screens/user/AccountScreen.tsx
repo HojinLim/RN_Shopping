@@ -1,4 +1,12 @@
-import { Alert, Image, Pressable, StyleSheet, Text, View } from "react-native";
+import {
+  Alert,
+  Image,
+  Pressable,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import React from "react";
 import { useRecoilValue } from "recoil";
 import { currentUserState } from "../../../src/atom/currentUserState";
@@ -8,13 +16,15 @@ import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp, StackScreenProps } from "@react-navigation/stack";
 import { RootStackParamList } from "../../../src/static/const/type";
 import { signOut } from "../../../src/utils/functions/user";
-// import { signOut } from "../../api/firebase/userManage";
+import testImage from "@assets/test.png";
 
-const testHandler = () => {};
 const AccountScreen = () => {
   const currentUser = useRecoilValue(currentUserState);
-  const navi = useNavigation<StackNavigationProp<RootStackParamList>>();
-
+  console.log(typeof testImage);
+  const navi =
+    useNavigation<StackNavigationProp<RootStackParamList, "Account">>();
+  testImage;
+  const testHandler = () => {};
   const handleDeleteAccount = () => {
     Alert.alert(
       "삭제 확인",
@@ -32,6 +42,7 @@ const AccountScreen = () => {
       { cancelable: false }
     );
   };
+  console.log(currentUser?.profileImg)
 
   return (
     <View style={styles.container}>
@@ -40,10 +51,11 @@ const AccountScreen = () => {
       ) : (
         <View style={styles.container}>
           <Text style={styles.heading}>내 정보</Text>
-          <Image
-            source={require("../../../assets/test.png")}
-            style={styles.itemImage}
-          />
+          <TouchableOpacity
+            onPress={() => navi.navigate("ProfileEdit", { uri: currentUser.profileImg })}
+          >
+            <Image source={{ uri:currentUser.profileImg }} style={styles.itemImage} />
+          </TouchableOpacity>
 
           {/* 이메일 정보 */}
           <View style={styles.infoItem}>

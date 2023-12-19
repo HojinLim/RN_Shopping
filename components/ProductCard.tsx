@@ -7,10 +7,8 @@ import {
   StyleSheet,
   Pressable,
 } from "react-native";
-import { Product, RootStackParamList } from "../src/static/const/type";
-import { deleteProduct } from "../src/utils/functions/productManage";
-import { StackScreenProps } from "@react-navigation/stack";
-import { useNavigation } from "@react-navigation/native";
+import { Product } from "../src/static/const/type";
+
 import { Ionicons } from "@expo/vector-icons";
 
 type Props = {
@@ -24,17 +22,16 @@ const ProductCard = ({ onPress, item }: Props) => {
       <TouchableOpacity onPress={onPress}>
         <Image style={styles.image} source={{ uri: item.imgs[0] }} />
       </TouchableOpacity>
-      <View style={styles.content}>
+      <View style={styles.contentContainer}>
         <Text style={styles.title}>{item.name}</Text>
-
         <Text style={styles.title}>{item.category}</Text>
         <Text style={styles.price}>{item.price}원</Text>
 
-        <Ionicons name="heart" color="red">
-          {item.like}
-        </Ionicons>
+        <View style={{ flexDirection: "row", alignItems: "center" }}>
+          <Ionicons name="heart" color="red" />
+          <Text style={{ color: "red" }}>{item.like}</Text>
+        </View>
       </View>
-
     </View>
   );
 };
@@ -59,7 +56,7 @@ const styles = StyleSheet.create({
     resizeMode: "cover",
     borderRadius: 8,
   },
-  content: {
+  contentContainer: {
     padding: 12,
   },
   title: {

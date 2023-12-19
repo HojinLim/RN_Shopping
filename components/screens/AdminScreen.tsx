@@ -11,7 +11,7 @@ import {
   TextInputProps,
   View,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Picker } from "@react-native-picker/picker";
 import * as ImagePicker from "expo-image-picker";
 import { inputNumberFormat } from "../../src/utils/functions/number";
@@ -23,12 +23,24 @@ import {
   CommonScreenProp,
   RootStackParamList,
 } from "../../src/static/const/type";
-import { StackNavigationProp } from "@react-navigation/stack";
+import { StackNavigationProp, StackScreenProps } from "@react-navigation/stack";
 import { useNavigation } from "@react-navigation/native";
+import Icon from "../common/Icon";
+import TextButton from "../common/TextButton";
+import TextIconButton from "../common/TextIconButton";
 
-type Props = {};
+type AdminScreenProps = StackScreenProps<RootStackParamList, "Admin">;
+const AdminScreen = ({ route }: AdminScreenProps) => {
+  // 사진 찍은거 받아옴
+  useEffect(() => {
+    if (route.params && route.params?.uri) {
+      const uri = route.params.uri;
+      console.log("값 받아옴");
+      console.log(uri);
+      setImageUrl((prev) => [...prev, uri]);
+    }
+  }, [route.params?.uri]);
 
-const AdminScreen = (props: Props) => {
   const [selectedCategory, setSelectedCategory] = useState("default");
 
   const handleCategoryChange = (category: string) => {
@@ -57,7 +69,7 @@ const AdminScreen = (props: Props) => {
     if (!status?.granted) {
       const permission = await requestImagePermission();
       if (!permission.granted) {
-        return null;
+        return;
       }
     }
     // 이미지 업로드 기능
@@ -139,7 +151,7 @@ const AdminScreen = (props: Props) => {
   };
 
   return (
-    <View>
+    <View style={styles.outerContainer}>
       <View style={styles.pickerContainer}>
         {/* 카테고리 선택 */}
         <Picker
@@ -150,54 +162,56 @@ const AdminScreen = (props: Props) => {
           <Picker.Item label="Select a category" value="default" />
           <Picker.Item label="상의" value="상의" />
           <Picker.Item label="하의" value="하의" />
-          <Picker.Item label="액세서리" value="액세서리" />
+          <Picker.Item label="신발" value="신발" />
+          <Picker.Item label="모자" value="모자" />
+          <Picker.Item label="악세사리" value="악세사리" />
         </Picker>
       </View>
-      <View>
+      {/* <View>
         <Text>선택된 카테고리: {selectedCategory}</Text>
-      </View>
+      </View> */}
       {/* 상품명 영역 */}
-      <View style={styles.input}>
-        <TextInput
-          onChangeText={changeNameHandler}
-          value={name}
-          keyboardType="default"
-        />
-        {!name && (
-          <Text style={[styles.priceText, { color: "gray" }]}>
-            상품명을 입력해주세요
-          </Text>
-        )}
+      <View style={styles.inputContainer}>
+        <View style={globalStyles.rowContainer}>
+          <TextInput
+            style={styles.input}
+            placeholder="상품명을 입력해주세요"
+            onChangeText={changeNameHandler}
+            value={name}
+            keyboardType="default"
+          />
+        </View>
+
+        {/* 가격 영역 */}
+        <View style={globalStyles.rowContainer}>
+          <TextInput
+            style={styles.input}
+            placeholder="가격을 입력해주세요"
+            onChangeText={changePriceHandler}
+            value={price}
+            keyboardType="default"
+          />
+        </View>
       </View>
 
-      {/* 가격 영역 */}
-      <View style={styles.input}>
-        <TextInput
-          onChangeText={changePriceHandler}
-          value={price}
-          keyboardType="number-pad"
-        />
-        {!price ? (
-          <Text style={[styles.priceText, { color: "gray" }]}>
-            가격을 입력해주세요
-          </Text>
-        ) : (
-          <Text style={styles.priceText}>(원)</Text>
-        )}
-      </View>
       {/* 이미지 업로드 영역 */}
 
-      <View style={globalStyles.rowContainer}>
-        <IconButton
+      <View style={{ ...globalStyles.rowContainer, marginStart: 10 }}>
+        <TextIconButton
           onPress={setImage}
-          color="black"
           iconName={"image-outline"}
+          text="사진 올리기"
+          fontColor="black"
+          btnColor="black"
           size={40}
         />
-        <IconButton
+
+        <TextIconButton
           onPress={cameraHandler}
-          color="black"
           iconName={"camera-outline"}
+          text="사진 촬영"
+          fontColor="black"
+          btnColor="black"
           size={40}
         />
       </View>
@@ -207,7 +221,16 @@ const AdminScreen = (props: Props) => {
         deleteImageHandler={deleteImageHandler}
       />
 
-      <Button onPress={submitHandler} title="제출하기" />
+      <TextButton
+        onPress={submitHandler}
+        title="제출하기"
+        customStyle={{
+          position: "absolute",
+          bottom: 0,
+          width: "100%",
+          backgroundColor: "blue",
+        }}
+      />
     </View>
   );
 };
@@ -215,6 +238,7 @@ const AdminScreen = (props: Props) => {
 export default AdminScreen;
 
 const styles = StyleSheet.create({
+  outerContainer: { flex: 1 },
   pickerContainer: {
     borderColor: "black",
     borderWidth: 2,
@@ -223,15 +247,22 @@ const styles = StyleSheet.create({
   circle: {
     width: 2,
   },
+  inputContainer: {
+    marginVertical: 10,
+    alignContent: "center",
+    alignItems: "center",
+  },
   input: {
-    height: 40,
-    width: "80%",
+    height: "auto",
+    width: "90%",
     borderColor: "gray",
     borderWidth: 1,
     marginBottom: 16,
-    paddingHorizontal: 8,
+    paddingHorizontal: 15,
     flexDirection: "row",
     marginHorizontal: 10,
+    paddingVertical: 15,
+    fontSize: 15,
   },
   priceText: {
     alignItems: "center",

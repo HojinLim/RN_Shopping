@@ -6,6 +6,7 @@ export interface User {
   displayName: string;
   email: string;
   created_at: string;
+  profileImg?: string;
 }
 
 export interface Product {
@@ -26,7 +27,7 @@ export type RootStackParamList = {
   Home: undefined;
   Login: undefined;
   Signup: undefined;
-  Admin: undefined;
+  Admin: { uri?: string };
   Tab: undefined;
   Account: undefined;
   Like: undefined;
@@ -36,6 +37,7 @@ export type RootStackParamList = {
     item: Product;
   };
   Duplicate: undefined;
+  ProfileEdit: { uri?: string };
 };
 
 export type RootTabParamList = {
@@ -44,7 +46,7 @@ export type RootTabParamList = {
   Detail: {
     item: Product;
   };
-  Test: undefined
+  Test: undefined;
 };
 
 const queryClient = new QueryClient({

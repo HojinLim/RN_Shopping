@@ -28,9 +28,9 @@ export const signOut = async () => {
     await auth.signOut();
     Alert.alert("로그아웃 완료!");
   } catch (error) {
-    alert(error);
+    // alert(error);
     console.log("Error signing out:", error);
-    throw error;
+    // throw error;
   }
 };
 

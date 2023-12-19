@@ -33,6 +33,7 @@ import { Ionicons } from "@expo/vector-icons";
 import CameraScreen from "./components/screens/CameraScreen";
 import TestScreen from "./components/screens/TestScreen";
 import Duplicate from "./components/screens/user/Duplicate";
+import ProfileEditScreen from "./components/screens/user/ProfileEditScreen";
 
 const Stack = createStackNavigator<RootStackParamList>();
 const Tab = createBottomTabNavigator<RootTabParamList>();
@@ -169,6 +170,11 @@ const App = () => {
               options={{ headerShown: false }}
               name="Duplicate"
               component={Duplicate}
+            />
+             <Stack.Screen
+              options={{ headerShown: false }}
+              name="ProfileEdit"
+              component={ProfileEditScreen}
             />
             <Stack.Group>
               <Stack.Screen name="Login" component={LoginScreen} />

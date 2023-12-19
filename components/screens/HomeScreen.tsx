@@ -5,12 +5,14 @@ import {
   ActivityIndicator,
   Pressable,
   Button,
+  useColorScheme,
+  Appearance,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { currentUserState } from "../../src/atom/currentUserState";
-import { onAuthStateChanged } from "firebase/auth";
+import { onAuthStateChanged, updateCurrentUser } from "firebase/auth";
 import { auth } from "../api/firebase/firebase";
 import {
   Product,
@@ -18,19 +20,20 @@ import {
   RootTabParamList,
   User,
 } from "../../src/static/const/type";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+
 import { HJ_USER } from "../../src/static/const/variable";
 import { removeUserData, saveUserData } from "../../src/utils/functions/user";
-import { getAllProductData } from "../../src/utils/functions/productManage";
 import ProductCard from "../ProductCard";
 import { ScrollView } from "react-native-gesture-handler";
 import { StackScreenProps } from "@react-navigation/stack";
-
 import useProductQuery from "../hooks/useProductQuery";
 import MenuHeader from "../MenuHeader";
 import { currentCategory } from "../../src/atom/currentCategory";
+import {
+  downloadBasicProfileImage,
+  downloadProfileImage,
+} from "@components/api/firebase/storage/storage";
 
-type Props = {};
 type HomeScreenProps = StackScreenProps<RootStackParamList, "Home">;
 
 const HomeScreen = ({ navigation, route }: HomeScreenProps) => {
@@ -52,13 +55,16 @@ const HomeScreen = ({ navigation, route }: HomeScreenProps) => {
     }
   }, [curretCategory, data]);
   useEffect(() => {
-    onAuthStateChanged(auth, (user) => {
+    onAuthStateChanged(auth, async (user) => {
       if (user) {
+        const url = await downloadProfileImage(user.uid);
+        
         const curretUser = {
           uid: user.uid,
           displayName: user.displayName,
           email: user.email,
           created_at: user.metadata.creationTime,
+          profileImg: url,
         } as User;
 
         saveUserData(HJ_USER, JSON.stringify(curretUser));
@@ -69,6 +75,7 @@ const HomeScreen = ({ navigation, route }: HomeScreenProps) => {
       }
     });
   }, []);
+
 
   if (isLoading) {
     return <ActivityIndicator />;
