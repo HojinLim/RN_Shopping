@@ -38,11 +38,11 @@
 
 | 작업            | 미리보기 |
 | --------------- | ------- |
-| **메인 페이지** | <img src="https://github.com/HojinLim/RN_Shopping/assets/69897998/54dcec80-99ec-4aa2-a4d4-999282d8976b" alt="메인페이지" width="300" height="550"> |
-| **상세 페이지** | <img src="https://github.com/HojinLim/RN_Shopping/assets/69897998/f48f298c-885f-4252-b267-a27d8124d786" alt="로그인페이지" width="300" height="550"> |
-| **내 정보 페이지** | <img src="https://github.com/HojinLim/RN_Shopping/assets/69897998/28254e73-7c37-4a2b-b9ca-e2fd261a292e" alt="장바구니" width="300" height="550"> |
-| **좋아요 페이지** | <img src="https://github.com/HojinLim/RN_Shopping/assets/69897998/11a93bea-876c-45d8-86b8-d2d0d88b76fb" alt="삭제" width="300" height="550"> |
-| **장바구니 페이지** | <img src="https://github.com/HojinLim/RN_Shopping/assets/69897998/c53c4841-58fd-45a0-a5bb-bc1f77296d34" alt="제품 추가" width="300" height="550"> |
+| **메인 페이지** | <img src="https://github.com/HojinLim/RN_Shopping/assets/69897998/54dcec80-99ec-4aa2-a4d4-999282d8976b" alt="메인페이지" width="300" height="600"> |
+| **상세 페이지** | <img src="https://github.com/HojinLim/RN_Shopping/assets/69897998/f48f298c-885f-4252-b267-a27d8124d786" alt="로그인페이지" width="300" height="600"> |
+| **내 정보 페이지** | <img src="https://github.com/HojinLim/RN_Shopping/assets/69897998/28254e73-7c37-4a2b-b9ca-e2fd261a292e" alt="장바구니" width="300" height="600"> |
+| **좋아요 페이지** | <img src="https://github.com/HojinLim/RN_Shopping/assets/69897998/11a93bea-876c-45d8-86b8-d2d0d88b76fb" alt="삭제" width="300" height="600"> |
+| **장바구니 페이지** | <img src="https://github.com/HojinLim/RN_Shopping/assets/69897998/c53c4841-58fd-45a0-a5bb-bc1f77296d34" alt="제품 추가" width="300" height="600"> |
 
 
 
